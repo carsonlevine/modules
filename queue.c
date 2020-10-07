@@ -34,7 +34,8 @@ queue_t* qopen(void) {
       }
       f=p;
   }       
-  free(f);                                                           
+  free(f);   
+  free(qsp);                                                                    
 }                                                                               
                                                                                 
 /* put element at the end of the queue                                          
@@ -42,19 +43,21 @@ queue_t* qopen(void) {
  */                                                                             
                                                                                 
 int32_t qput(queue_t *qp, void *elementp) { // need to malloc for each node     
-  queueStruct_t *qsp = (queueStruct_t*)qp;
-  if (qsp==NULL) {                                                               
-    qsp->front=elementp;                                                         
-    qsp->back=elementp;                                                          
+  queueStruct_t *qsp=(queueStruct_t*)qp;                                        
+  node_t *np=malloc(sizeof(node_t));                                            
+  np->data=elementp;                                                            
+  if (qsp==NULL) {                                                              
+    qsp->front=np;                                                              
+    qsp->back=np;                                                               
     return 0;                                                                   
-  } else {                                                                        
-    qsp->back->next=elementp;                                                    
-    qsp->back=elementp;                                                          
+  } else {                                                                      
+    qsp->back->next=np;                                                         
+    qsp->back=np;                                                               
     return 0;                                                                   
   }                                                                             
  return -1;                                                                     
-}                                                                               
-                                                                                
+}                                                           
+                                                                         
 /* get the first first element from queue, removing it from the queue */        
 void* qget(queue_t *qp) {                                                       
   queueStruct_t *qsp = (queueStruct_t*)qp;
