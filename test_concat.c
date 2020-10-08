@@ -34,12 +34,12 @@ int main(void) {
   muffin_t* last=qget(q1);                                                      
   if (first==muffin && last==muffin2) {                                         
     printf("SUCCESS: qconcat worked\n");                                        
-    qclose(q2);                                                                 
+		// qclose(q2);                                                                 
     qclose(q1);                                                                 
     exit(EXIT_SUCCESS);                                                         
   } else {                                                                      
     printf("FAILURE: qconcat did not work\n");                                  
-    qclose(q2);                                                                 
+    //qclose(q2);                                                                 
     qclose(q1);                                                                 
     exit(EXIT_FAILURE);                                                         
     }                                                                           

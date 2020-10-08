@@ -39,8 +39,7 @@ int main(void){
                                                                                 
   void *key="Fruit Loops";
 
-  //void *qremove(queue_t *qp,bool (*searchfn)(void* elementp,const void* const void* sk\
-eyp)                                                                                    
+  //void *qremove(queue_t *qp,bool (*searchfn)(void* elementp,const void* const void* skeyp)                                                                                    
  /* search a queue using a supplied boolean function (as in qsearch),                   
  * removes the element from the queue and returns a pointer to it or                    
  * NULL if not found                                                                    

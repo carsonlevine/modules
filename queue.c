@@ -74,8 +74,10 @@ void* qget(queue_t *qp) {
 	if (qsp->front == NULL)
 		return NULL;
 	void* first=qsp->front->data;
-	free(qsp->front);                                                             
-	qsp->front=qsp->front->next;                                                  
+	free(qsp->front->data);                                                        
+	node_t* tmp=qsp->front;
+	qsp->front=qsp->front->next;
+	free(tmp);
 	return first;                     
 }                                                                               
                                                                                 
