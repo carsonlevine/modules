@@ -1,3 +1,13 @@
+/* queue.c --- 
+ * 
+ * 
+ * Author: Marguerite Genereux
+ * Created: Mon Oct  5 19:10:32 2020 (-0400)
+ * Version: 
+ * 
+ * Description: 
+ * 
+ */
 #include "queue.h"                                                              
 #include <stdlib.h>                                                             
 #include <stdio.h>                                                              
@@ -20,17 +30,13 @@ queue_t* qopen(void) {
   qp->back=NULL;                                                                
   return (queue_t*)qp;                                                          
 }                                                                               
-                                                                                
-  // to be safe check that the nodes we are working with are not null- esp when\
- freeing!!                                                                      
-                                                                                
+                                                                                  
 /* deallocate a queue, frees everything in it */                                
-void qclose(queue_t *qp) { // need to free data within every node-- only if it \
-has data to free- order matters! get the data in the nodes first and then       
+void qclose(queue_t *qp) {       
   queueStruct_t *qsp=(queueStruct_t*)qp;                                        
   node_t *f=qsp->front;                                                         
   for (node_t *p=qsp->front;p!=NULL;) {                                         
-    if (p!=NULL)                                                                
+    if (p!=NULL) 
       free(p->data);                                                            
     f=p->next;                                                                  
     free(p);                                                                    
@@ -65,20 +71,22 @@ int32_t qput(queue_t *qp, void *elementp) { // need to malloc for each node
 /* get the first first element from queue, removing it from the queue */        
 void* qget(queue_t *qp) {                                                       
   queueStruct_t *qsp=(queueStruct_t*)qp;                                        
-  void* first=qsp->front->data;                                                 
-  free(qsp->front);                                                             
-  qsp->front=qsp->front->next;                                                  
-  return first;                                                                 
+	if (qsp->front == NULL)
+		return NULL;
+	void* first=qsp->front->data;
+	free(qsp->front);                                                             
+	qsp->front=qsp->front->next;                                                  
+	return first;                     
 }                                                                               
                                                                                 
 /* apply a function to every element of the queue */                            
 void qapply(queue_t *qp, void (*fn)(void* elementp)) {                          
   queueStruct_t *qsp=(queueStruct_t*)qp;                                        
-  for (node_t *p=qsp->front;p!=NULL;p=p->next) {                                
-    fn(p);                                                                      
+  for (node_t *p=qsp->front;p!=NULL;p=p->next) { //accounts for NULL?               
+    fn(p->data);                                      
   }                                                                             
 }                                                                               
-// we create the searchfn- it's indiviidual to each test case                  \
+// we create the searchfn- it's indiviidual to each test case 
                                                                                 
 /* search a queue using a supplied boolean function                             
  * skeyp -- a key to search for                                                 
@@ -94,7 +102,7 @@ void* qsearch(queue_t *qp,
               bool (*searchfn)(void* elementp,const void* keyp),                
               const void* skeyp) {                                              
   queueStruct_t *qsp=(queueStruct_t*)qp;                                        
-  for (node_t *p=qsp->front;p!=NULL;p=p->next) {                                
+  for (node_t *p=qsp->front;p!=NULL;p=p->next) { //think the p!=NULL takes care of it
     bool found=searchfn(p->data,skeyp);                                         
     if (found)                                                                  
       return p->data;                                                           
@@ -105,14 +113,13 @@ void* qsearch(queue_t *qp,
 /* search a queue using a supplied boolean function (as in qsearch),            
  * removes the element from the queue and returns a pointer to it or            
  * NULL if not found                                                            
- */                                                                            \
-                                                                                
+ */                                       
 void* qremove(queue_t *qp,                                                      
               bool (*searchfn)(void* elementp,const void* keyp),                
               const void* skeyp) {                                              
   queueStruct_t *qsp=(queueStruct_t*)qp;                                        
   node_t *f=qsp->front;                                                         
-  for (node_t *p=qsp->front;p!=NULL;p=p->next) {                                
+  for (node_t *p=qsp->front;p!=NULL;p=p->next) { // accounts for NULL           
     bool found=searchfn(p->data,skeyp);                                         
     if (found) {                                                                
       void* tmp=p->data;                                                        
@@ -120,20 +127,25 @@ void* qremove(queue_t *qp,
       free(p);                                                                  
       return(tmp);                                                              
     }                                                                           
-    f=p;                                                                        
-  }                                                                             
-  return NULL;                                                                  
-}                                                                               
-                                                                                
-/* concatenatenates elements of q2 into q1                                     \
- * q2 is dealocated, closed, and unusable upon completion                       
+    f=p;                                                                       
+  }                                                                            
+  return NULL;                                                                 
+}                                                                              
+                                                                               
+/* concatenatenates elements of q2 into q1 
+ * q2 is dealocated, closed, and unusable upon completion                      
  */                                                                             
-void qconcat(queue_t *q1p, queue_t *q2p) {                                      
-  queueStruct_t *q1sp=(queueStruct_t*)q1p;                                      
+void qconcat(queue_t *q1p, queue_t *q2p) {
+	
+  queueStruct_t *q1sp=(queueStruct_t*)q1p;                                    
   queueStruct_t *q2sp=(queueStruct_t*)q2p;                                      
-  q1sp->back->next=q2sp->front;                                                 
-  q1sp->back=q2sp->back;                                                        
-  free(q2sp); //might only need to free the queue memory not each node since we\
- are reassigning- experiment w this!                                            
-}                                                                               
-               
+	if(q2sp != NULL && q1sp == NULL){
+		q1sp = q2sp;
+		free(q2sp);
+	}
+	else if(q2sp != NULL){
+		q1sp->back->next=q2sp->front;                                             
+		q1sp->back=q2sp->back;                                                   
+		free(q2sp);
+	}
+}
