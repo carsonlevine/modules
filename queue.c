@@ -36,14 +36,18 @@ queue_t* qopen(void) {
 /* deallocate a queue, frees everything in it */                                
 void qclose(queue_t *qp) {       
   queueStruct_t *qsp=(queueStruct_t*)qp;                                        
-  node_t *f=qsp->front;                                                         
-  for (node_t *p=qsp->front;p!=NULL;) {                                         
-    if (p!=NULL) 
-      free(p->data);                                                            
-    f=p->next;                                                                  
-    free(p);                                                                    
-    p=f;                                                                        
-  }                                                                             
+  node_t *f=qsp->front;       
+
+  if (f != NULL) {
+    for (node_t *p=qsp->front;p!=NULL;) {                                         
+      if (p != NULL && p->data != NULL) {
+        free(p->data);
+      }                                                            
+        f=p->next;                                                                  
+        free(p);                                                                    
+        p=f;                                                                        
+    }  
+  }       
   free(qsp);                                                                    
 }                                                                               
                                                                                 

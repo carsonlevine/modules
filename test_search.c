@@ -59,25 +59,21 @@ void *key="iPhone";
 void *result = qsearch(phone, search, key);
 if (strcmp((char*)result,(char*)key) ==0 ){                                                                
     printf("SUCCESS: qsearch returned a pointer to element for non empty list\n");          
-	free(result);
 	qclose(phone);                                                               
 }else{                                                                              
     printf("FAILURE: qsearch returned NULL for non empty list\n");                    
-	free(result);
 	qclose(phone);
 	exit(EXIT_FAILURE);                                                               
 }  
 
 // empty queue test
 queue_t *empty = qopen();
-	void *empty_result = qremove(empty,search,key);
+	void *empty_result = qsearch(empty,search,key);
 	if (empty_result == NULL){
 		printf("SUCCESS: qsearch returned NULL for empty list\n");
-		free(empty_result);
 		qclose(empty);
 	}else{
 		printf("FAILURE: qsearch did not work for empty list\n");
-		free(empty_result);
 		qclose(empty);
 		exit(EXIT_FAILURE);
 	}
