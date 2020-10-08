@@ -25,7 +25,9 @@ typedef struct queueStruct {
                                                                                 
 /* create an empty queue */                                                     
 queue_t* qopen(void) {                                                          
-  queueStruct_t *qp = malloc(sizeof(queueStruct_t));                            
+  queueStruct_t *qp;
+	if ((	qp = (queueStruct_t *)malloc(sizeof(queueStruct_t))) == NULL)
+		return NULL;
   qp->front=NULL;                                                               
   qp->back=NULL;                                                                
   return (queue_t*)qp;                                                          
@@ -63,7 +65,7 @@ int32_t qput(queue_t *qp, void *elementp) { // need to malloc for each node
   } else {                                                                      
     qsp->back->next=np;                                                         
     qsp->back=np;                                                               
-    return 0;                                                                   
+    return 0;                                                                  
     }                                                                           
  return -1;                                                                     
 }                                                                               
@@ -73,10 +75,11 @@ void* qget(queue_t *qp) {
   queueStruct_t *qsp=(queueStruct_t*)qp;                                        
 	if (qsp->front == NULL)
 		return NULL;
-	void* first=qsp->front->data;
-	free(qsp->front->data);                                                        
+	void* first=qsp->front->data;                                                        
 	node_t* tmp=qsp->front;
 	qsp->front=qsp->front->next;
+	if (qsp->front == NULL)
+		qsp->back = NULL;
 	free(tmp);
 	return first;                     
 }                                                                               
