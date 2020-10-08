@@ -13,23 +13,22 @@ typedef struct muffin {
                                                                                 
 int main(void) {                                                                
   // create a muffin                                                            
-  muffin_t *muffin=malloc(sizeof(muffin_t));                                    
-  strcpy(muffin->flavor,"blueberry");                                           
-  muffin->price=5.00;                                                           
-  muffin->expdate=202012;                                                       
+  muffin_t *muffin1=malloc(sizeof(muffin_t));                                   
+  strcpy(muffin1->flavor,"blueberry");                                          
+  muffin1->price=5.00;                                                          
+  muffin1->expdate=202012;                                                      
                                                                                 
   // place it into a queue                                                      
   queue_t *q1=qopen();                                                          
-  int32_t qputresult=qput(&q1,(queue_t*)&muffin);                                 
+  int32_t qputresult=qput(q1,muffin1);                                          
   if (qputresult!=0) { //can just put qput in this if statement                 
     printf("FAILURE: qput did not work\n");                                     
-    free(muffin);                                                               
-    qclose(&q1);                                                                 
+    qclose(q1);                                                                 
     exit(EXIT_FAILURE);                                                         
   } else {                                                                      
     printf("SUCCESS: qput worked\n");                                           
-    free(muffin);                                                               
-    qclose(&q1);                                                                 
+    qclose(q1);                                                                 
     exit(EXIT_SUCCESS);                                                         
-  }             
-}                                                                
+    }                                                                           
+}                                                                               
+         
