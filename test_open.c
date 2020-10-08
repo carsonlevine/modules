@@ -16,7 +16,6 @@ int main(void){
 
     // set up a new queue.
     queue_t *q = qopen();
-
     // qopen should return queue_t *pointer to NULL
     if (q==NULL){
         printf("SUCCESS: qopen returned pointer to empty queue");
