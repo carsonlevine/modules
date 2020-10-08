@@ -23,11 +23,6 @@ typedef struct person{
 	double rate;
 } person_t;
 
-void age_2years(void *elementp){
-	person_t *p = (person_t *)elementp;
-	p->age = p->age + 2 ;
-}
-
 int main(void){
 	queue_t *qp = qopen();
 	// NEED TO MALLOC? or it happens in queue.c
@@ -41,36 +36,33 @@ int main(void){
 	qput(qp, (void *)&p3);
 	qput(qp, (void *)&p4);  
 
-	//appply function to all
-	qapply(qp, &age_2years);
-	
 	person_t *p;
-	//getting p1, checking age has been increased by 2
+	//getting p1
 	p = (person_t *)qget(qp);
-	if (p->age !=  22){
-		printf("FAILURE 1: qapply did not apply the function to all elements in the nonempty queue\n");
+	if (strcmp(p->name, "Sherrina") != 0){
+		printf("FAILURE: qget did not get the first element in the nonempty queue\n");
 		exit(EXIT_FAILURE);
 	}
 	//getting p2
 	p = (person_t *)qget(qp);                                              
-  if (p->age !=  23){  
-    printf("FAILURE 2: qapply did not apply the function to all elements in the nonempty queue\n");
-	exit(EXIT_FAILURE);                                                            
+  if (p->age != 21){                                           
+    printf("FAILURE: qget did not get the first element in the nonempty queue\n"); 
+    exit(EXIT_FAILURE);                                                            
 	}
 	//getting p3
 	p = (person_t *)qget(qp);                                              
-  if (p->age !=  24){ 
-    printf("FAILURE 3: qapply did not apply the function to all elements in the nonempty queue\n");
-		exit(EXIT_FAILURE);                                                            
+  if (p->rate != 5.6){                                           
+    printf("FAILURE: qget did not get the first element in the nonempty queue\n"); 
+    exit(EXIT_FAILURE);                                                            
   }
 	//getting p4
 	p = (person_t *)qget(qp);                                                        
-  if (p->age !=  25){
-    printf("FAILURE 4: qapply did not apply the function to all elements in the nonempty queue\n");
-	exit(EXIT_FAILURE);                                                            
+  if (strcmp(p->name, "Margot") != 0){                                           
+    printf("FAILURE: qget did not get the first element in the nonempty queue\n"); 
+    exit(EXIT_FAILURE);                                                            
   } 
 
 	qclose(qp);
-	printf("SUCCESS: qapply applied the functino to all elements in the nonempty queue\n");
+	printf("SUCCESS: qget got the first element in the nonempty queue\n");
 	exit(EXIT_SUCCESS);
 }
