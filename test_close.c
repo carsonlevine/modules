@@ -3,12 +3,13 @@
 #include <stdio.h>                                                                                           
 #include <string.h>                                                                                          
                                                                                                              
-#define MAXNM 20                                                                                             
+#define MAXNM 20
+
 typedef struct cereal {                                                                                      
   char name[MAXNM];                                                                                          
   double price;                                                                                              
 
-}cereal_t;                                                                                                   
+} cereal_t;                                                                                                   
                                                                                                              
 int main(void){                                                                                              
                                                                                                              
@@ -25,19 +26,21 @@ int main(void){
   strcpy(cereal2->name,"Fruit Loops");                                                                       
   cereal2->price=4.99;                                                                                       
                                                                                                              
-  queue_t *cereal = qopen();                                                                                                   
-  qput(&cereal,&cereal1);                                                                                    
-  qput(&cereal,&cereal2);                                                                                    
-  qclose(cereal);                                                                                           
-  void* result = qget(cereal1);
- 
- if (result==NULL) {
-    printf("SUCCESS: qclose returned a void pointer for non empty list\n");                                
-    exit(EXIT_SUCCESS);                                                                                    
-}
-else{                                                                                                   
-    printf("FAILURE: qclose returedn NULL for non empty list\n");                                          
-    exit(EXIT_FAILURE);                                                                                    
-}  
+  queue_t *cereal = qopen();                                                                                        //place into queue           
+  qput(cereal,cereal1);                                                                                    
+  qput(cereal,cereal2);
 
+	//close the queue
+	qclose(cereal);
+  printf("SUCCESS: qclose worked for non empty list\n");
+                                                                                                
+	// printf("FAILURE: qclose did not work for non empty list\n");          
+
+	queue_t *emptyC = qopen();
+	qclose(emptyC);
+	printf("SUCCESS: qclose worked for an empty list\n");
+	exit(EXIT_SUCCESS);
+	
+
+	
 }
