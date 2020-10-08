@@ -27,4 +27,4 @@ test_search: queue.o test_search.o
 			gcc $(CFLAGS) queue.o test_search.o -o $@
 
 clean:
-		rm -f *.o test_apply test_remove test_put test_concat test_close test_get
+		rm -f *.o test_apply test_remove test_put test_concat test_close test_get test_search
