@@ -26,6 +26,10 @@ typedef struct person{
 int main(void){
 	queue_t *qp = qopen();
 
+	person_t *p;
+	//testing on empty queue
+	p = qget(qp);
+	
 	person_t *p1=malloc(sizeof(person_t));
 	person_t *p2=malloc(sizeof(person_t));
 	person_t *p3=malloc(sizeof(person_t));
@@ -48,10 +52,7 @@ int main(void){
 	qput(qp, p3);
 	qput(qp, p4);  
 
-
-	person_t *p;
 	//getting p1
-
 	p = qget(qp);
 
 	if (p->age != 20){
@@ -59,30 +60,30 @@ int main(void){
 		exit(EXIT_FAILURE);
 	}
 	free(p);
-#if 0	
 
-
-	/*	//getting p2
+	//getting p2
 	p = qget(qp);                                              
   if (p->age != 21){                                           
     printf("FAILURE: qget did not get the first element in the nonempty queue\n"); 
     exit(EXIT_FAILURE);                                                            
 	}
+	free(p);
 	//getting p3
 	p = qget(qp);                                              
   if (p->rate != 5.6){                                           
     printf("FAILURE: qget did not get the first element in the nonempty queue\n"); 
     exit(EXIT_FAILURE);                                                            
   }
+	free(p);
 	//getting p4
 	p = qget(qp);                                                        
   if (strcmp(p->name, "Margot") != 0){                                           
     printf("FAILURE: qget did not get the first element in the nonempty queue\n"); 
     exit(EXIT_FAILURE);                                                            
-  } 
-	*/
-#endif
+  }
+	free(p);
+
 	qclose(qp);
-	printf("SUCCESS: qget got the first element in the nonempty queue\n");
+	printf("SUCCESS: qget was called on empty and nonempty queue. Got the first element in the nonempty queue\n");
 	exit(EXIT_SUCCESS);
 }
