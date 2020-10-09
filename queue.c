@@ -130,11 +130,15 @@ void* qremove(queue_t *qp,
   node_t *f=qsp->front;                                                         
   for (node_t *p=qsp->front;p!=NULL;p=p->next) { // accounts for NULL           
     bool found=searchfn(p->data,skeyp);                                         
-    if (found) {                                                                
-      void* tmp=p->data;                                                        
-      f->next=p->next; 
-      if (p != qsp->front)                                                                  
-          free(p);                                                                 
+		if (found) {
+			void* tmp=p->data;                                                        
+			if (p==f) {
+				qsp->front=p->next;
+				free(p);
+				return(tmp);
+			}
+      f->next=p->next;
+      free(p);                                                                 
       return(tmp);                                                              
     }                                                                           
     f=p;                                                                       
