@@ -43,7 +43,7 @@ void qclose(queue_t *qp) {
       if (p != NULL && p->data != NULL) {
         free(p->data);
       }                                                            
-        f=p->next;                                                                  
+        f=p->next;
         free(p);                                                                    
         p=f;                                                                        
     }  
@@ -132,8 +132,9 @@ void* qremove(queue_t *qp,
     bool found=searchfn(p->data,skeyp);                                         
     if (found) {                                                                
       void* tmp=p->data;                                                        
-      f->next=p->next;                                                          
-      free(p);                                                                  
+      f->next=p->next; 
+      if (p != qsp->front)                                                                  
+          free(p);                                                                 
       return(tmp);                                                              
     }                                                                           
     f=p;                                                                       

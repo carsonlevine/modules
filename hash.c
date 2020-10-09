@@ -14,6 +14,8 @@
  *
  */
 #include <stdint.h>
+#include "queue.h"
+#include "hash.h"
 
 /* 
  * SuperFastHash() -- produces a number between 0 and the tablesize-1.
@@ -66,3 +68,19 @@ static uint32_t SuperFastHash (const char *data,int len,uint32_t tablesize) {
   return hash % tablesize;
 }
 
+typedef struct hashtableStruct {
+  queue_t *htable;
+  uint32_t hsize;
+} hashtableStruct_t;
+
+/* hopen -- opens a hash table with initial size hsize */
+
+hashtable_t *hopen (uint32_t hsize){
+  hashtableStruct_t *htp = (hashtableStruct_t*)malloc(sizeof(hashtableStruct_t));
+  htp->htable = (queue_t*)malloc(sizeof(queue_t*)* hsize);
+  for (int i=0; i<hsize; i++){
+    (htp->htable)[i] = qopen();
+  }
+  return (hashtable_t*)htp;
+
+}

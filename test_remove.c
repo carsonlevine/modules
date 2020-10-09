@@ -12,13 +12,13 @@ typedef struct cereal {
 }cereal_t;
 
 bool search(void* elementp, const void* keyp){                                  
-cereal_t *p=(cereal_t*)elementp;                                                  
-if (strcmp(p->name,keyp)==0)      
- return true;
-double *pcheck = (double*)keyp;
-if (p->price == *pcheck)                                                        
-      return true;                                                              
-return false;                                                                   
+  cereal_t *p=(cereal_t*)elementp;                                                  
+  if (strcmp(p->name,keyp)==0)      
+    return true;
+  double *pcheck = (double*)keyp;
+  if (p->price == *pcheck)                                                        
+    return true;                                                              
+  return false;                                                                   
 }
 
 int main(void){                                                                 
@@ -36,7 +36,7 @@ int main(void){
   qput(cereal,cereal1);                                                        
   qput(cereal,cereal2);                                                        
                                                                                 
-  void *key="Fruit Loops";
+  void *key="Cheerios";
 
  //void *qremove(queue_t *qp,bool (*searchfn)(void* elementp,const void* const void* skeyp)
  /* search a queue using a supplied boolean function (as in qsearch),                   
@@ -47,11 +47,11 @@ int main(void){
   void *result = qremove(cereal,search,key);                                          
 	if (strcmp((char*)result,(char*)key) ==0 ){                                                                
       printf("SUCCESS: qremove returned a void pointer for non empty list\n");          
-			free(result);
+			//free(result);
 			qclose(cereal);                                                               
     }else{                                                                              
       printf("FAILURE: qremove returned NULL for non empty list\n");                    
-			free(result);
+			//free(result);
 			qclose(cereal);
 			exit(EXIT_FAILURE);                                                               
     }                                                                                   
@@ -60,11 +60,11 @@ int main(void){
 	void *EVAL = qremove(emptyC,search,key);
 	if (EVAL == NULL){
 		printf("SUCESS: qremove returned NULL for empty list\n");
-		free(EVAL);
+		//free(EVAL);
 		qclose(emptyC);
 	}else{
 		printf("FAILURE: qremove did not work for empty list\n");
-		free(EVAL);
+		//free(EVAL);
 		qclose(emptyC);
 		exit(EXIT_FAILURE);
 	}
