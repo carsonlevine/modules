@@ -148,15 +148,31 @@ void qconcat(queue_t *q1p, queue_t *q2p) {
 	
   queueStruct_t *q1sp=(queueStruct_t*)q1p;                                    
   queueStruct_t *q2sp=(queueStruct_t*)q2p;                                      
-	if(q2sp != NULL && q1sp == NULL){
+	if (q2sp != NULL && q1sp == NULL){
 		q1sp = q2sp;
-		free(q2sp);
-	}
+		qclose(q2sp);
+	} 
 	else if(q1sp != NULL && q2sp!=NULL){
-		q1sp->back->next=q2sp->front;                                             
-		q1sp->back=q2sp->back;                                                   
-		free(q2sp);
-	} else {
-		free(q2sp);
+		if (q1sp->front!=NULL&&q2sp->front!=NULL) {	
+			q1sp->back->next=q2sp->front;                                             
+			q1sp->back=q2sp->back;                                                   
+			q2sp->front=NULL;
+			q2sp->back=NULL;
+			qclose(q2sp);
+		
+		}
+	       	else if (q1sp->front!=NULL&&q2sp->front==NULL) {
+			qclose(q2sp);
+		} 
+		else {
+			q1sp->front=q2sp->front;
+			q1sp->back=q2sp->back;
+			q2sp->front=NULL;
+			q2sp->back=NULL;
+			qclose(q2sp);
+		}
+	} 
+	else {
+	  qclose(q2sp);
 	}
 }
