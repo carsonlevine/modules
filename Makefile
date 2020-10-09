@@ -1,9 +1,12 @@
 CFLAGS= -Wall -pedantic -std=c11
 
-all: test_apply test_put test_concat test_remove test_close test_get test_search test_open
+all: test_hopen test_apply test_put test_concat test_remove test_close test_get test_search test_open
 
 %.o: %.c %.h
 		gcc $(CFLAGS) -c $<
+
+test_hopen: hash.o test_hopen.o
+		gcc $(CFLAGS) hash.o test_hopen.o -o $@
 
 test_apply: queue.o test_apply.o
 		gcc $(CFLAGS) queue.o test_apply.o -o $@
@@ -30,4 +33,4 @@ test_open: queue.o test_open.o
 		gcc $(CFLAGS) queue.o test_open.o -o $@
 
 clean:
-		rm -f *.o test_apply test_remove test_put test_concat test_close test_get test_search test_open
+		rm -f *.o test_apply test_remove test_put test_concat test_close test_get test_search test_open test_hopen
