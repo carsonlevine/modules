@@ -97,20 +97,28 @@ void hclose(hashtable_t *htp) {
 	free(htsp->htable);
 	free(htsp);
 }
-#if 0
-
 /* hput -- puts an entry into a hash table under designated key                            
  * returns 0 for success; non-zero otherwise                                               
  */                                                                                        
-int32_t hput(hashtable_t *htp, void *ep, const char *key, int keylen);                     
+//int32_t hput(hashtable_t *htp, void *ep, const char *key, int keylen);                     
                                                                                            
 /* happly -- applies a function to every entry in hash table */                            
-void happly(hashtable_t *htp, void (*fn)(void* ep));                                       
+void happly(hashtable_t *htp, void (*fn)(void* ep)){
+	hashtableStruct_t *htsp=(hashtableStruct_t*)htp;
+	for (int i=0;i<htsp->hsize;i++) {
+		queue_t *queue = htsp[i].htable;
+		qapply(queue,fn);
+	}
+}
+
                                                                                            
 /* hsearch -- searchs for an entry under a designated key using a                          
  * designated search fn -- returns a pointer to the entry or NULL if                       
  * not found                                                                               
- */                                                                                        
+ */
+
+#if 0
+
 void *hsearch(hashtable_t *htp,                                                            
         bool (*searchfn)(void* elementp, const void* searchkeyp),                          
         const char *key,                                                                   
@@ -129,7 +137,7 @@ void *hremove(hashtable_t *htp,
 	hashtableStruct_t *htsp=(hashtableStruct_t*)htp;
 	void *target=NULL;
 	for (int i=0;i<htsp->hsize;i++) {
-		target=qremove(htsp[i].htable,searchfn,key);
+	target=qremove(htsp[i].htable,searchfn,key);
 	}
 	if (target!=NULL) {
 		return (target);
