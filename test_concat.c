@@ -33,13 +33,16 @@ int main(void) {
   muffin_t* first=qget(q1);                                                     
   muffin_t* last=qget(q1);                                                      
   if (first==muffin && last==muffin2) {                                         
-    printf("SUCCESS: qconcat worked\n");                                        
-		// qclose(q2);                                                                 
-    qclose(q1);                                                                 
-    exit(EXIT_SUCCESS);                                                         
-  } else {                                                                      
-    printf("FAILURE: qconcat did not work\n");                                  
-    //qclose(q2);                                                                 
+    printf("SUCCESS: qconcat worked on nonempty queues\n");                                    
+		qclose(q1);
+		/*	queue_t *q3=qopen();
+		qconcat(q1,q3);
+		if (qget(q1)!=muffin&&qget(q1)!=muffin2&&qget(q1)==NULL) 
+			printf("SUCCESS: qconcat worked with one nonempty and one empty queue"); 
+			qclose(q1);*/
+		exit(EXIT_SUCCESS);
+	} else {                                                                      
+    printf("FAILURE: qconcat did not work on a nonempty queue\n");                               
     qclose(q1);                                                                 
     exit(EXIT_FAILURE);                                                         
     }                                                                           

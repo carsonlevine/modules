@@ -152,9 +152,11 @@ void qconcat(queue_t *q1p, queue_t *q2p) {
 		q1sp = q2sp;
 		free(q2sp);
 	}
-	else if(q2sp != NULL){
+	else if(q1sp != NULL && q2sp!=NULL){
 		q1sp->back->next=q2sp->front;                                             
 		q1sp->back=q2sp->back;                                                   
+		free(q2sp);
+	} else {
 		free(q2sp);
 	}
 }
