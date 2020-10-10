@@ -77,21 +77,21 @@ typedef struct hashtableStruct {
 
 /* hopen -- opens a hash table with initial size hsize */
 
-hashtable_t *hopen (uint32_t hsize){
+hashtable_t *hopen (uint32_t hsize){ //cannot assume malloc works- look at queue.c
   hashtableStruct_t *htp = (hashtableStruct_t*)malloc(sizeof(hashtableStruct_t));
 	htp->htable= (queue_t**)malloc(hsize*sizeof(queue_t*));
 	htp->hsize=hsize;
 	for (int i=0;i<htp->hsize;i++)
-		htp->htable[i]=NULL;
+		htp->htable[i]=qopen(); // can't assume qopen doesn't return NULL- need to check that all aren't null and if one is then need to backtrack and free everything
   return (hashtable_t*)htp;
 
 }
 
 /* hclose -- closes a hash table */                                                       
 void hclose(hashtable_t *htp) {
-	hashtableStruct_t *htsp=(hashtableStruct_t*)htp;
+	hashtableStruct_t *htsp=(hashtableStruct_t*)htp; // need to check if htp is NULL
 	for (int i=0;i<htsp->hsize;i++) {
-		if(htsp->htable[i]!=NULL)
+		//if(htsp->htable[i]!=NULL) //qclose handles that
       qclose(htsp->htable[i]);
 	}
 	free(htsp->htable);
@@ -102,11 +102,11 @@ void hclose(hashtable_t *htp) {
  * returns 0 for success; non-zero otherwise                                               
  */                                                                                        
 int32_t hput(hashtable_t *htp, void *ep, const char *key, int keylen) {                     
-  hashtableStruct_t *htsp=(hashtableStruct_t*)htp;                                  
+  hashtableStruct_t *htsp=(hashtableStruct_t*)htp; // error check for all parameters                     
 	uint32_t index=SuperFastHash(key,keylen,htsp->hsize);
-  if (htsp->htable[index]==NULL){
+  /*if (htsp->htable[index]==NULL){
     htsp->htable[index] = qopen();
-		}
+		}*/
   queue_t *qp= htsp->htable[index];
 	if (qput(qp,ep)==0) {;
 		return 0;
@@ -115,11 +115,10 @@ int32_t hput(hashtable_t *htp, void *ep, const char *key, int keylen) {
 }
 		
 /* happly -- applies a function to every entry in hash table */                            
-void happly(hashtable_t *htp, void (*fn)(void* ep)){
+void happly(hashtable_t *htp, void (*fn)(void* ep)){ //need to error check for parameters
 	hashtableStruct_t *htsp=(hashtableStruct_t*)htp;
 	for (int i=0;i<htsp->hsize;i++) {
-		  queue_t *queue = htsp->htable[i];
-			qapply(queue,fn);
+			qapply(htsp->htable[i],fn);
 	}
 }
 

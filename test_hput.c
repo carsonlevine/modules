@@ -48,8 +48,6 @@ int main(void) {
 	  exit(EXIT_FAILURE);                                                              
   } else {                                                                           
     printf("SUCCESS: qput worked on empty queue\n");  
-		//free(q1);
-		//free(muffin1);
 		hclose(muffintable);
 	  exit(EXIT_SUCCESS);                                                              
   }                                                                                  
