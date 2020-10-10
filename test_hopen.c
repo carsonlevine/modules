@@ -15,11 +15,11 @@
 int main(void) {
 	hashtable_t *hash=hopen(10);
 	if (hash!=NULL) {
-		printf("success\n");
+		printf("SUCCESS:hopen worked for empty list\n");
 		hclose(hash);
 		exit(EXIT_SUCCESS);
 	} else {
-		printf("failed\n");
+		printf("FAILED:hopen did not work for empty list\n");
 		hclose(hash);
 		exit(EXIT_FAILURE);
 	}

@@ -14,6 +14,7 @@
 #include <stdint.h>
 #include <string.h>
 #include "queue.h"
+#include "hash.h"
 
 #define MAXNM 50
 #define hsize 2
@@ -29,34 +30,46 @@ void age_2years(void *elementp){
 	p->age = p->age + 2 ;
 }
 
+bool search(void* elementp, const void* keyp){
+    person_t *p=(person_t*)elementp;
+    if (strcmp(p->name,keyp)==0)
+        return true;
+    double *pcheck = (double*)keyp;
+    if (p->rate == *pcheck)
+      return true;
+		int *agecheck = (int*)keyp;
+		if(p->age == *agecheck)
+			return true;
+    return false;
+}
 int main(void){
-	queue_t *qp = qopen();
-	queue_t *qp2 = qopen();
+	//queue_t *qp = qopen();
+	//queue_t *qp2 = qopen();
 	//testing on empty queue
 	//qapply(qp, &age_2years);
 	person_t p1 = {"Sherrina", 20, 1.2};
 	person_t p2 = {"Carson", 21, 3.4};
-	person_t p3 = {"Elle", 22, 5.6};
-	person_t p4 = {"Margot", 23, 7.8};
+	//person_t p3 = {"Elle", 22, 5.6};
+	//person_t p4 = {"Margot", 23, 7.8};
 	//places p1 - p4 in this order in new queue 
-	qput(qp, (void *)&p1);
+	//qput(qp, (void *)&p1);
 	//qput(qp, (void *)&p2);
 	//qput(qp2, (void *)&p3);
 	//qput(qp2, (void *)&p4);  
 
 	hashtable_t *persontable=hopen(hsize);
 	//try putting a queue into hashtable
-	hput(persontable,qp,"p",1);
+	hput(persontable,&p1,"p",1);
 	//try putting a person into a queue in hashtable
-	hput(persontable,p2,"p",1);
+	hput(persontable,&p2,"p",1);
 	
 	//appply function to all in nonempty queue
 	happly(persontable,&age_2years);
 	
 	person_t *p;
 	//getting p1, checking age has been increased by 2
-	p = (person_t *)hsearch(persontable,&searchfn,"p",1); // need to write search fn
-	
+	p = (person_t *)hsearch(persontable,&search,"p",1); // need to write search fn
+ 
 	if (p->age !=  22){
 		printf("FAILURE 1: qapply did not apply the function to all elements in the nonempty queue\n");
 		hclose(persontable);

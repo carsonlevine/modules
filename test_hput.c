@@ -35,26 +35,22 @@ int main(void) {
   muffin2->price=6.00;                                                               
   muffin2->expdate=202010;                                                           
 	*/                                                                                 
-  queue_t *q1=qopen();
-  qput(q1,muffin1);// places into empty queue                     
+  //queue_t *q1=qopen();
+  //qput(q1,muffin1);// places into empty queue                     
   //qput(q1,muffin2);//places into nonempty queue
 
 	hashtable_t *muffintable=hopen(hsize);
-	int32_t hputresult=hput(muffintable,q1,"m",1);
+	int32_t hputresult=hput(muffintable,muffin1,"m",1);
 	
   if (hputresult!=0) {                                               
     printf("FAILURE: hput did not work\n");                                          
     hclose(muffintable);
-		free(muffintable);
-		free(q1);
-		free(muffin1);
-    exit(EXIT_FAILURE);                                                              
+	  exit(EXIT_FAILURE);                                                              
   } else {                                                                           
-    printf("SUCCESS: qput worked on both empty and nonempty queues\n");  
-    hclose(muffintable);
-		free(muffintable);
-		free(q1);
-		free(muffin1);
-    exit(EXIT_SUCCESS);                                                              
+    printf("SUCCESS: qput worked on empty queue\n");  
+		//free(q1);
+		//free(muffin1);
+		hclose(muffintable);
+	  exit(EXIT_SUCCESS);                                                              
   }                                                                                  
 }     

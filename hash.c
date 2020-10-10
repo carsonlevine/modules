@@ -79,25 +79,25 @@ typedef struct hashtableStruct {
 
 hashtable_t *hopen (uint32_t hsize){
   hashtableStruct_t *htp = (hashtableStruct_t*)malloc(sizeof(hashtableStruct_t));
-	htp->htable=NULL;
-  htp->hsize=hsize;
-	/*for (int i=0; i<hsize; i++){
-    htp->htable[i] = qopen(); // old version: htp[i].table
-  }*/
+	htp->htable= (queue_t**)malloc(hsize*sizeof(queue_t*));
+	htp->hsize=hsize;
+	for (int i=0;i<htp->hsize;i++)
+		htp->htable[i]=NULL;
   return (hashtable_t*)htp;
 
 }
 
-/* hclose -- closes a hash table */                                                        
+/* hclose -- closes a hash table */                                                       
 void hclose(hashtable_t *htp) {
 	hashtableStruct_t *htsp=(hashtableStruct_t*)htp;
 	for (int i=0;i<htsp->hsize;i++) {
 		if(htsp->htable[i]!=NULL)
       qclose(htsp->htable[i]);
 	}
-	//free(htsp->htable);
+	free(htsp->htable);
 	free(htsp);
 }
+
 /* hput -- puts an entry into a hash table under designated key                            
  * returns 0 for success; non-zero otherwise                                               
  */                                                                                        
@@ -105,11 +105,11 @@ int32_t hput(hashtable_t *htp, void *ep, const char *key, int keylen) {
   hashtableStruct_t *htsp=(hashtableStruct_t*)htp;                                  
 	uint32_t index=SuperFastHash(key,keylen,htsp->hsize);
   if (htsp->htable[index]==NULL){
-    htsp->htable[index] = (queue_t **)malloc(sizeof(queue_t*));
-  }
+    htsp->htable[index] = qopen();
+		}
   queue_t *qp= htsp->htable[index];
-	if (qput(qp,ep)==0) {                                                   
-   return 0;
+	if (qput(qp,ep)==0) {;
+		return 0;
 	}
   return -1;                                                                         
 }
@@ -118,8 +118,8 @@ int32_t hput(hashtable_t *htp, void *ep, const char *key, int keylen) {
 void happly(hashtable_t *htp, void (*fn)(void* ep)){
 	hashtableStruct_t *htsp=(hashtableStruct_t*)htp;
 	for (int i=0;i<htsp->hsize;i++) {
-		queue_t *queue = htsp[i].htable;
-		qapply(queue,fn);
+		  queue_t *queue = htsp->htable[i];
+			qapply(queue,fn);
 	}
 }
 

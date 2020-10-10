@@ -4,9 +4,9 @@
 
 valgrind --leak-check=full --show-leak-kinds=all test_hopen
 
-#valgrind --leak-check=full --show-leak-kinds=all test_hput
+valgrind --leak-check=full --show-leak-kinds=all test_hput
 
-#valgrind --leak-check=full --show-leak-kinds=all test_happly
+valgrind --leak-check=full --show-leak-kinds=all test_happly
                                                                                
 #valgrind --leak-check=full --show-leak-kinds=all test_concat
 
