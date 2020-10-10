@@ -1,4 +1,4 @@
-CFLAGS= -Wall -pedantic -std=c11
+CFLAGS= -Wall -pedantic -std=c11 -g
 
 all: test_hput test_hopen test_apply test_put test_concat test_remove test_close test_get test_search test_open
 

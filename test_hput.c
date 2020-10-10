@@ -51,7 +51,7 @@ int main(void) {
     exit(EXIT_FAILURE);                                                              
   } else {                                                                           
     printf("SUCCESS: qput worked on both empty and nonempty queues\n");  
-    hclose(q1);
+    hclose(muffintable);
 		free(muffintable);
 		free(q1);
 		free(muffin1);

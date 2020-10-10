@@ -79,11 +79,11 @@ typedef struct hashtableStruct {
 
 hashtable_t *hopen (uint32_t hsize){
   hashtableStruct_t *htp = (hashtableStruct_t*)malloc(sizeof(hashtableStruct_t));
-  //htp->htable = (queue_t*)malloc(sizeof(queue_t*)* hsize);
-	htp->hsize=hsize;
-	for (int i=0; i<hsize; i++){
+	htp->htable=NULL;
+  htp->hsize=hsize;
+	/*for (int i=0; i<hsize; i++){
     htp->htable[i] = qopen(); // old version: htp[i].table
-  }
+  }*/
   return (hashtable_t*)htp;
 
 }
@@ -92,7 +92,8 @@ hashtable_t *hopen (uint32_t hsize){
 void hclose(hashtable_t *htp) {
 	hashtableStruct_t *htsp=(hashtableStruct_t*)htp;
 	for (int i=0;i<htsp->hsize;i++) {
-		qclose(htsp->htable[i]);
+		if(htsp->htable[i]!=NULL)
+      qclose(htsp->htable[i]);
 	}
 	//free(htsp->htable);
 	free(htsp);
@@ -103,7 +104,11 @@ void hclose(hashtable_t *htp) {
 int32_t hput(hashtable_t *htp, void *ep, const char *key, int keylen) {                     
   hashtableStruct_t *htsp=(hashtableStruct_t*)htp;                                  
 	uint32_t index=SuperFastHash(key,keylen,htsp->hsize);
-	if (qput(htsp->htable[index],ep)==0) {                                                   
+  if (htsp->htable[index]==NULL){
+    htsp->htable[index] = (queue_t **)malloc(sizeof(queue_t*));
+  }
+  queue_t *qp= htsp->htable[index];
+	if (qput(qp,ep)==0) {                                                   
    return 0;
 	}
   return -1;                                                                         
@@ -124,18 +129,28 @@ void happly(hashtable_t *htp, void (*fn)(void* ep)){
  * not found                                                                               
  */
 
-#if 0
+
 
 void *hsearch(hashtable_t *htp,                                                            
         bool (*searchfn)(void* elementp, const void* searchkeyp),                          
         const char *key,                                                                   
-        int32_t keylen);                                                                   
+        int32_t keylen){
+          hashtableStruct_t *htsp=(hashtableStruct_t*)htp;
+          uint32_t index=SuperFastHash(key, keylen, htsp->hsize);
+          void *target = NULL;
+          target=qsearch(htsp[index].htable, searchfn, key);
+          if (target!=NULL) {
+            return (target);
+          } else {
+            return NULL;
+          }
+}                                                                
                                                                                            
 /* hremove -- removes and returns an entry under a designated key                          
  * using a designated search fn -- returns a pointer to the entry or                       
  * NULL if not found                                                                       
  */
-#endif
+
 
 void *hremove(hashtable_t *htp,                                                            
         bool (*searchfn)(void* elementp, const void* searchkeyp),                          
