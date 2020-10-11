@@ -17,10 +17,12 @@ int main(void) {
 	if (hash!=NULL) {
 		printf("SUCCESS:hopen worked for empty list\n");
 		hclose(hash);
+		printf("SUCCESS: hclose worked for empty list\n");
 		exit(EXIT_SUCCESS);
 	} else {
 		printf("FAILED:hopen did not work for empty list\n");
 		hclose(hash);
+		printf("FAILED: hclose did not work for empty list\n");
 		exit(EXIT_FAILURE);
 	}
 }

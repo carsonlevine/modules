@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#valgrind --leak-check=full --show-leak-kinds=all test_put
+valgrind --leak-check=full --show-leak-kinds=all test_put
 
 valgrind --leak-check=full --show-leak-kinds=all test_hopen
 
