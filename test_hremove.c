@@ -16,7 +16,7 @@
 #include "hash.h"
                                                                                      
 #define MAXREG 10                                                                    
-#define hsize 3
+#define hsize 4
 
 typedef struct muffin {                                                              
   char flavor[MAXREG];                                                               
@@ -59,24 +59,20 @@ int main(void) {
     hput(muffintable,muffin3,"banana",6);
 
 
-/* hsearch -- searchs for an entry under a designated key using a
- * designated search fn -- returns a pointer to the entry or NULL if
- * not found
+/* hremove -- removes and returns an entry under a designated key                          
+ * using a designated search fn -- returns a pointer to the entry or                       
+ * NULL if not found                                                                       
  */
-/*void *hsearch(hashtable_t *htp, 
-	      bool (*searchfn)(void* elementp, const void* searchkeyp), 
-	      const char *key, 
-	      int32_t keylen); */
 
     void *key="pumpkin";
-    void *result = hsearch(muffintable, searchfn, key, 7);
+    void *result = hremove(muffintable, searchfn, key, 7);
 
     if (strcmp((char*)result, (char*)key)== 0){
-        printf("SUCCESS: hsearch returned a pointer to element\n");          
+        printf("SUCCESS: hremove returned a pointer to element\n");          
         hclose(muffintable);
         exit(EXIT_SUCCESS);
     }else{
-        printf("FAILURE: hsearch did not work\n");
+        printf("FAILURE: hremove did not work\n");
         hclose(muffintable);
         exit(EXIT_FAILURE);
     }
@@ -85,12 +81,5 @@ int main(void) {
 
     
 
-
-
-
-
-
-
-	
-                                                                                   
+                                                                          
 }     
