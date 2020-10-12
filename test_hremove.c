@@ -70,11 +70,13 @@ int main(void) {
     if (strcmp((char*)result, (char*)key)== 0){
         printf("SUCCESS: hremove returned a pointer to element\n");          
         hclose(muffintable);
-        exit(EXIT_SUCCESS);
+				free(result);
+				exit(EXIT_SUCCESS);
     }else{
         printf("FAILURE: hremove did not work\n");
         hclose(muffintable);
-        exit(EXIT_FAILURE);
+				free(result);
+				exit(EXIT_FAILURE);
     }
 
 

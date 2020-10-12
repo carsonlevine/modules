@@ -74,11 +74,11 @@ int main(void) {
     if (strcmp((char*)result, (char*)key)== 0){
         printf("SUCCESS: hsearch returned a pointer to element\n");          
         hclose(muffintable);
-        exit(EXIT_SUCCESS);
+				exit(EXIT_SUCCESS);
     }else{
         printf("FAILURE: hsearch did not work\n");
         hclose(muffintable);
-        exit(EXIT_FAILURE);
+				exit(EXIT_FAILURE);
     }
 
 
